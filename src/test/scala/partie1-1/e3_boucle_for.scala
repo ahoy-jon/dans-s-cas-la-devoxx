@@ -2,6 +2,8 @@ package premiers_pas
 
 import support.HandsOnSuite
 
+import scala.collection.immutable
+
 /**
 *  Les for, comprendre le 'for' classique et le 'for comprehension'.
 *
@@ -13,8 +15,8 @@ class e3_boucle_for extends HandsOnSuite {
   //for classique
 
   exercice("les for c’est assez simple") {
-    //0, 1, 2, 3, 4, 5, 6, 7, 8, 9
-    val quelqueNombres = Range(0, 10)
+    //022
+    val quelqueNombres = Range(start = 0, end = 10)
     // on peut aussi utiliser 'until' et 'to' => 0 until 10 == Range(0,10) == 0 to 9
 
     // n’hésitez pas à jouer avec l’interpréteur Scala ouvert via
@@ -25,8 +27,7 @@ class e3_boucle_for extends HandsOnSuite {
     for (i <- quelqueNombres) {
       somme += i
     }
-
-    somme should equal(__)
+    somme should equal(45)
   }
 
   /**
@@ -42,7 +43,7 @@ class e3_boucle_for extends HandsOnSuite {
       }
     }
 
-    somme should equal(__)
+    somme should equal(20)
   }
 
   //for comprehensions
@@ -59,18 +60,35 @@ class e3_boucle_for extends HandsOnSuite {
     
     val quelqueNombres = 0 until 10
 
-    val uneListe =
+    val uneListe: immutable.Seq[Int] =
       for {
         i <- quelqueNombres
-        if ((i % 2) == 0)
+        if (i % 2) == 0
       }
       yield i
+
+    uneListe should be(Seq(0, 2, 4, 6, 8))
 
     //reduceLeft ici permet de calculer la somme de tous les éléments de la liste
     //en utilisant une autre fonction passée en paramètre.
     //En ce qui concerne les fonctions d’ordre supérieur et les lambda expression,
     //un jeu de tests est prévu dans la suite de l’atelier
-    uneListe.reduceLeft( (k,l) => k + l) should be(__)
+
+    uneListe.sum should be(20)
+
+    uneListe.foldLeft(0)((acc, e) => {
+      /*
+(0,0)
+(0,2)
+(2,4)
+(6,6)
+(12,8)
+       */
+      println(acc, e)
+      acc + e
+    })
+
+    uneListe.reduceLeft( (k,l) => k + l) should be(20)
   }
 
 
@@ -80,14 +98,16 @@ class e3_boucle_for extends HandsOnSuite {
   * xValues et ceux de yValues.
   */
   exercice("Les boucles for peuvent être imbriquées") {
-    val xValues = 1 until 5
-    val yValues = 1 until 3
-    val coordinates = for {
+    val xValues = 1 until 5 // List(1, 2, 3, 4)
+    val yValues = 1 until 3 // List(1, 2)
+    val coordinates: immutable.Seq[(Int, Int)] = for {
       x <- xValues
       y <- yValues
     }
     yield (x, y)
-    coordinates(4) should be(__)
+
+
+    coordinates(4) should be((3,1))
   }
 
   /**

@@ -21,7 +21,7 @@ trait HandsOnSuite extends MyFunSuite with ShouldMatchers {
 
 
 
-  def anchor[A](a:A):Unit = macro RecorderMacro.anchor[A]
+  def explain[A](a:A):Unit = macro RecorderMacro.anchor[A]
 
   def exercice(testName:String)(testFun: Unit)(implicit suite: MyFunSuite, anchorRecorder: AnchorRecorder):Unit = macro RecorderMacro.apply
 
